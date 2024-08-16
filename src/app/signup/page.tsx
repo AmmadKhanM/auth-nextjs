@@ -1,6 +1,7 @@
 'use client'
 import { useState, ChangeEvent, } from 'react';
-
+import {useRouter} from 'next/navigation'
+import axios from 'axios';
 // Define the shape of the form state
 interface FormState {
   email: string;
@@ -9,12 +10,15 @@ interface FormState {
 }
 
 export default function Signup() {
+  const router = useRouter();
   // Initialize state with an object
   const [formState, setFormState] = useState<FormState>({
     email: '',
     password: '',
     username: ''
   });
+  const [loading, setloading] = useState(false);
+
 
   // Handle changes to form inputs
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -27,12 +31,22 @@ export default function Signup() {
 
   // Handle form submission
   const handleSubmit = async (event: any) => {
-    event.preventDefault();
+    try {
+      setloading(true);
+      const repsonse = await axios.post('/api/users/signup', formState);
+      console.log('Signup sucess', repsonse.data);
+      router.push('/login');
+      
+    } catch (error: any) {
+      console.log('Signup failed', error.message)
+    }finally{
+      setloading(false)
+    }
   };
 
   return (
     <div className="max-w-md mx-auto p-6 border border-gray-300 rounded-lg shadow-lg">
-      <h2 className="text-2xl font-bold mb-4 text-center">Signup</h2>
+      <h2 className="text-2xl font-bold mb-4 text-center">{loading ? 'processing...' : 'Signup'}</h2>
         <div className="mb-4">
           <label htmlFor="email" className="block text-sm font-medium text-gray-100">Email:</label>
           <input
@@ -42,7 +56,7 @@ export default function Signup() {
             value={formState.email}
             onChange={handleChange}
             required
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-black"
           />
         </div>
         <div className="mb-4">
@@ -54,7 +68,7 @@ export default function Signup() {
             value={formState.username}
             onChange={handleChange}
             required
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-black"
           />
         </div>
         <div className="mb-4">
@@ -66,7 +80,7 @@ export default function Signup() {
             value={formState.password}
             onChange={handleChange}
             required
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-black"
           />
         </div>
         <button
