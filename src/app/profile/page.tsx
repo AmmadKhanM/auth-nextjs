@@ -22,6 +22,20 @@ export default function Profile() {
       setloading(false)
     }
   }
+  const getUserDetail = async () => {
+    try {
+      setloading(true);
+      const res = await axios.get('/api/users/getuser')
+      router.push(`/profile/${res?.data?.data?.username}`)    
+    } catch (error: any) {
+      console.log('get user failed', error.message)
+    }finally{
+      setloading(false)
+    }
+    
+    
+  }
+
   return (
 
     <>
@@ -30,9 +44,16 @@ export default function Profile() {
         <button
           onClick={logout}
           type="submit"
-          className="w-full py-2 px-4 bg-blue-500 text-white font-bold rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          className="w-full mb-4 py-2 px-4 bg-blue-500 text-white font-bold rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
         >
           logout
+        </button>
+        <button
+          onClick={getUserDetail}
+          type="submit"
+          className="w-full py-2 px-4 bg-blue-500 text-white font-bold rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+        >
+          Get user details
         </button>
     </div>
     </>

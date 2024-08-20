@@ -2,6 +2,7 @@
 import { useState, ChangeEvent, } from 'react';
 import {useRouter} from 'next/navigation'
 import axios from 'axios';
+import Link from 'next/link';
 // Define the shape of the form state
 interface FormState {
   email: string;
@@ -45,6 +46,8 @@ export default function Signup() {
   };
 
   return (
+    <>
+    
     <div className="max-w-md mx-auto p-6 border border-gray-300 rounded-lg shadow-lg">
       <h2 className="text-2xl font-bold mb-4 text-center">{loading ? 'processing...' : 'Signup'}</h2>
         <div className="mb-4">
@@ -91,5 +94,7 @@ export default function Signup() {
           Signup
         </button>
     </div>
+     <Link href='/login' className='block text-sm font-medium text-blue-500 underline text-center mt-10'>Login</Link>
+    </>
   );
 }
